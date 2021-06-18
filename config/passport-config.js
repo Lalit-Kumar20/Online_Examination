@@ -1,3 +1,4 @@
+// configuring passport js
 const passportLocalMongoose = require('passport-local-mongoose');
 const LocalStrategy = require('passport-local').Strategy
 const User = require('../models/all');

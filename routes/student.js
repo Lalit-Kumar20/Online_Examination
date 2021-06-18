@@ -1,3 +1,5 @@
+  // /student route
+
 const Student = require("../models/students");
 const User = require('../models/all')
 const passport = require('passport')
@@ -61,31 +63,35 @@ router.post('/register_student',(req,res)=>{
  
     const student = new Student({
         email : req.body.username,
+        username : req.body.username,
         roll_no : req.body.roll_no,
         password : req.body.password
     })
-    student.save((err)=>{
+    student.save((err,doc)=>{
         if(err){
             errors = []
             errors.push("User already exist")
             res.redirect("/student");
             console.log(err);
         }
-    })
-    User.register({username : req.body.username},req.body.password,function(err){
-        if(err)
-        {
-            errors = []
-            errors.push("Email already exist")
-            res.redirect("/student");
-        }
         else {
-            passport.authenticate("userLocal",{failureRedirect:'/student/unauth'})(req,res,function(){
-                errors=[]
-                res.redirect("/student/dashboard");
-               
-            })
+            User.register({username : req.body.username},req.body.password,function(err){
+                if(err)
+                {
+                    errors = []
+                    errors.push("Email already exist")
+                    res.redirect("/student");
+                }
+                else {
+                    passport.authenticate("userLocal",{failureRedirect:'/student/unauth'})(req,res,function(){
+                        errors=[]
+                        res.redirect("/student/dashboard");
+                       
+                    })
+                }
+                });
         }
-        });
+    })
+   
 })
 module.exports = router

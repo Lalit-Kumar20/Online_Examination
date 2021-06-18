@@ -1,0 +1,15 @@
+<h1>Test Created</h1>
+<a href="/teacher/dashboard/test/<%= id %> /mcq">Add MCQ question</a>
+<a href="/teacher/dashboard/test/<%= id %>/sub">Add Subjective Question</a>
+<%= id  %>
+ 
+<% for(let i = 0;i<qq.length;++i) {%>
+    <hr> 
+<form action="/teacher/dashboard/test/delete/<%=id%>/<%=i%>" method="GET">
+<h2><%=qq[i].q%> </h2>
+<button type="submit">Delete</button>
+</form> 
+<hr> 
+<% } %> 
+
+
