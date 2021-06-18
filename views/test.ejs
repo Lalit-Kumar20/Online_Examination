@@ -7,6 +7,19 @@
     <hr> 
 <form action="/teacher/dashboard/test/delete/<%=id%>/<%=i%>" method="GET">
 <h2><%=qq[i].q%> </h2>
+<% if(qq[i].type==="mcq") {%>
+   <h3><%= qq[i].a %> </h3>
+   <h3><%= qq[i].b %> </h3>
+   <h3><%= qq[i].c %> </h3>
+   <h3><%= qq[i].d %> </h3>
+   <% } %>
+   
+<% if(qq[i].im==="yes") {%>
+    <img src="/<%=qq[i].img%>" alt="img" width="60" height="60">
+    <% } %>
+    
+    
+   
 <button type="submit">Delete</button>
 </form> 
 <hr> 

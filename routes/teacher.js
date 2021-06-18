@@ -1,6 +1,7 @@
  // /teacher route
- const path = require('path')
- const multer = require('multer')
+const path = require('path')
+const fs = require('fs')
+const multer = require('multer')
 const Teacher = require("../models/teachers");
 const User = require('../models/all')
 const Test = require('../models/test')
@@ -66,12 +67,13 @@ test.save((err)=>{
 
 // test created now go to test section
 router.get('/dashboard/test/:id',ensureAuth,(req,res)=>{
-    const id = req.params.id
-   Test.findOne({id : id},function(err,found){
-       res.render('test',{
-           id : id,
+   Test.findOne({id : req.params['id']},function(err,found){
+    if(found){
+    res.render('test',{
+           id : req.params['id'],
            qq : found.questions
        })
+    }
    })
 })
 //implement add mcq method
@@ -82,11 +84,24 @@ router.get('/dashboard/test/:id/mcq',ensureAuth,(req,res)=>{
        id : id
    })
 })
+router.get('/dashboard/test/:id/sub',ensureAuth,(req,res)=>{
+    const id = req.params.id
+    res.render("sub",{
+        id : id
+    })
+ })
+ 
 
 // delete a mcq question
-router.get('/dashboard/test/delete/:id/:i',(req,res)=>{
+router.get('/dashboard/test/delete/:id/:i',ensureAuth,(req,res)=>{
     Test.findOne({id : req.params['id']},(err,found)=>{
         var ob = found.questions
+                //file removed
+        if(ob[req.params['i']].im==="yes"){
+           fs.unlinkSync("public/"+ob[req.params['i']].img)
+        }    
+              
+        
         ob.splice(req.params['i'],1);
         Test.updateOne({id : req.params['id']},{questions : ob},(err)=>{
             if(err) console.log(err)
@@ -111,6 +126,7 @@ router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
         b : req.body.qb,
         c : req.body.qc,
         d : req.body.qd,
+        im : "no",
         type : "mcq"
     }   
     
@@ -131,6 +147,7 @@ router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
         b : req.body.qb,
         c : req.body.qc,
         d : req.body.qd,
+        im : "yes",
         type : "mcq",
         img : req.file.filename
     }   
@@ -146,7 +163,47 @@ router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
  }
 })
  // adding mcq question complete
- 
+ // add subjective question
+ router.post('/dashboard/test/sub/:id',ensureAuth,upload,(req,res)=>{
+    const id = req.params.id
+    //without image
+    if(typeof req.file === "undefined")
+   {
+    var ob = {
+        q : req.body.ques,
+        im : "no",
+        type : "sub"
+    }   
+    
+    Test.findOne({id : id},(err,found)=>{
+      var tt = found.questions
+      tt.push(ob)
+      Test.updateOne({id : id},{questions : tt},(err)=>{
+          if(err) console.log(err)
+          else res.redirect('/teacher/dashboard/test/'+id);
+      })
+  })
+}
+// with image
+ else {
+    var ob = {
+        q : req.body.ques,
+        im : "yes",
+        type : "sub",
+        img : req.file.filename
+    }   
+    
+    Test.findOne({id : id},(err,found)=>{
+      var tt = found.questions
+      tt.push(ob)
+      Test.updateOne({id : id},{questions : tt},(err)=>{
+          if(err) console.log(err)
+          else res.redirect('/teacher/dashboard/test/'+id);
+      })
+  }) 
+ }
+})
+ // add subjective question complete
 
 //*********************************************** */
 
