@@ -111,7 +111,31 @@ router.get('/dashboard/test/delete/:id/:i',ensureAuth,(req,res)=>{
 })
 // delete a mcq question complete
 
+// delete a test
 
+router.get('/dashboard/test/delete/:id',(req,res)=>{
+    const id = req.params['id'];
+    Test.findOne({id : id},(err,found)=>{
+        if(found)
+        {
+            console.log(found)
+
+            for(let i = 0;i<found.questions.length;++i)
+            {
+               if(found.questions[i].im==="yes")
+               {
+                fs.unlinkSync("public/"+found.questions[i].img)
+               }      
+            }
+        }
+    })
+    Test.deleteOne({id : id},(err)=>{
+        if(err) console.log(err);
+        else res.redirect('/teacher/dashboard');
+    })
+})
+
+// delete test complete
 // adding mcq question
 
 // important add params in the end 
