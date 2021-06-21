@@ -1,0 +1,14 @@
+<% for(let i = 0;i<test.length;++i) {%> 
+<h3> <%= test[i].name %> </h3>
+<h3>Test Id <%= test[i].id %> </h3>
+<h3>Total Questions <%= test[i].questions.length %> </h3>
+    <% if(test[i].status===true){ %>
+    <a href="/teacher/dashboard/test/stop/<%= test[i].id %>">Stop</a>
+    <% } %>
+    <%  if(test[i].status===false){ %>
+        <a href="/teacher/dashboard/test/start/<%= test[i].id %>">Start</a>
+        <% } %>    
+<a href="/teacher/dashboard/test/<%=test[i].id%>">Edit</a>
+<a href="/teacher/dashboard/test/delete/<%=test[i].id%>">Delete</a>
+<hr>
+<% } %> 

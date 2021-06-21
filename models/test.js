@@ -4,7 +4,10 @@ mongoose.connect("mongodb://localhost:27017/userDBS4",{useNewUrlParser:true,useU
 mongoose.set("useCreateIndex",true);
 const testSchema = new mongoose.Schema({
     id : String,
-    questions : Array
+    questions : Array,
+    by : String,
+    name : String,
+    status : Boolean
 });
 const Test = new mongoose.model("Tests",testSchema);
 module.exports = Test;

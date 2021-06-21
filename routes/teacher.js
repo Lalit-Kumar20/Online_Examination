@@ -49,20 +49,56 @@ router.get('/dashboard',ensureAuth,(req,res)=>{
     //
 })
 
+router.get('/dashboard/test/stop/:id',ensureAuth,(req,res)=>{
+    Test.updateOne({id : req.params['id']},{status : false},(err)=>{
+        if(err) console.log(err)
+        else {
+            res.redirect('/teacher/dashboard/alltests')
+        }
+    })
+})
 
+
+router.get('/dashboard/test/start/:id',ensureAuth,(req,res)=>{
+    console.log(req.params['id'])
+    Test.updateOne({id : req.params['id']},{status : true},(err)=>{
+        if(err) console.log(err)
+        else {
+            res.redirect('/teacher/dashboard/alltests')
+        }
+    })
+})
 // after creating test
-router.get('/dashboard/createTest',ensureAuth,(req,res)=>{
-const id = uuidv1();
+router.post('/dashboard/createTest',ensureAuth,(req,res)=>{
+    const id = uuidv1();
+    console.log(req.body.testname)
 const test = new Test({
     id : id,
-    questions : []
+    questions : [],
+    by : req.user.username,
+    name : req.body.testname,
+    status : false
 })
 test.save((err)=>{
     if(err) console.log(err)
     else res.redirect('/teacher/dashboard/test/'+id);
 });
   
+})
+router.get('/dashboard/createTest',ensureAuth,(req,res)=>{
+res.render("addname")
 
+})
+
+router.get('/dashboard/alltests',ensureAuth,(req,res)=>{
+    Test.find({by : req.user.username},(err,found)=>{
+       
+        if(found){
+            res.render("alltests",{
+           test : found
+       })
+    }
+    })
 })
 
 // test created now go to test section
@@ -71,7 +107,8 @@ router.get('/dashboard/test/:id',ensureAuth,(req,res)=>{
     if(found){
     res.render('test',{
            id : req.params['id'],
-           qq : found.questions
+           qq : found.questions,
+           name : found.name
        })
     }
    })
