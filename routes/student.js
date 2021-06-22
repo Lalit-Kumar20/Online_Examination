@@ -3,7 +3,8 @@
 const Student = require("../models/students");
 const User = require('../models/all')
 const passport = require('passport')
-const {ensureAuth} = require('../config/auth')
+const {ensureAuth} = require('../config/auth');
+const Teacher = require("../models/teachers");
 const router = require("express").Router()
 var errors = []
 router.get('/',(req,res)=>{
@@ -17,6 +18,28 @@ router.get('/dashboard',ensureAuth,(req,res)=>{
     })
 
 })
+
+
+router.get('/dashboard/join',ensureAuth,(req,res)=>{
+    res.render('testId')
+})
+
+router.post('/dashboard/join',ensureAuth,(req,res)=>{
+    const testId = req.body.testId
+})
+
+
+router.get('/error/:err',(req,res)=>{
+    console.log(req.params['err'])
+    res.render("error",{
+        err : req.params['err']
+    })
+})
+
+
+
+
+
 router.post('/login_student',(req,res)=>{
     const user = new User({
         email : req.body.username,
@@ -27,24 +50,23 @@ router.post('/login_student',(req,res)=>{
         if(found===null)
         {
             errors = []
-            errors.push("Email don't exist")
           
-          res.redirect("/student");
+          res.redirect("/student/error/Email dont exist");
+          errors = []
         }
         else {
             req.login(user,function(err){
                 if(err)
                 {
                     errors = []
-                    errors.push("Can't log in")
-                  console.log(err);
-                  res.redirect("/student");
+                  res.redirect("/student/error/Can't log in");
+                  errors = []
                 }
                 else {
                   passport.authenticate("userLocal",{failureRedirect:'/student/unauth'})(req,res,function(){
                     errors=[]  
                     res.redirect("/student/dashboard");
-                      
+                      errors = []
         
                   })
                 }
@@ -56,8 +78,7 @@ router.post('/login_student',(req,res)=>{
 })
 router.get('/unauth',(req,res)=>{
     errors=[];
-    errors.push("Authentication failed");
-    res.redirect('/student')
+    res.redirect('/student/error/Authentication failed')
 })
 router.post('/register_student',(req,res)=>{
  
@@ -67,31 +88,41 @@ router.post('/register_student',(req,res)=>{
         roll_no : req.body.roll_no,
         password : req.body.password
     })
-    student.save((err,doc)=>{
-        if(err){
-            errors = []
-            errors.push("User already exist")
-            res.redirect("/student");
-            console.log(err);
+    Teacher.findOne({email : req.body.username},(err,found)=>{
+        if(found)
+        {
+            res.redirect("/student/error/User already exists");
+            
         }
         else {
-            User.register({username : req.body.username},req.body.password,function(err){
-                if(err)
-                {
+            student.save((err)=>{
+                if(err){
                     errors = []
-                    errors.push("Email already exist")
-                    res.redirect("/student");
+                    res.redirect("/student/error/User already exists");
+                    errors = []
+                    console.log(err);
                 }
                 else {
-                    passport.authenticate("userLocal",{failureRedirect:'/student/unauth'})(req,res,function(){
-                        errors=[]
-                        res.redirect("/student/dashboard");
-                       
-                    })
+                    User.register({username : req.body.username},req.body.password,function(err){
+                        if(err)
+                        {
+                            errors = []
+                            res.redirect("/student/error/Email already exists");
+                            errors = []
+                        }
+                        else {
+                            passport.authenticate("userLocal",{failureRedirect:'/student/unauth'})(req,res,function(){
+                                errors=[]
+                                res.redirect("/student/dashboard");
+                               errors = []
+                            })
+                        }
+                        });
                 }
-                });
+            })
         }
     })
+    
    
 })
 module.exports = router

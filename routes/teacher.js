@@ -11,6 +11,7 @@ const {
     v1: uuidv1,
     v4: uuidv4,
   } = require('uuid');
+const Student = require('../models/students');
   
   
 const router = require("express").Router()
@@ -23,6 +24,12 @@ router.get('/',(req,res)=>{
     });
 })
 
+router.get('/error/:err',(req,res)=>{
+    console.log(req.params['err'])
+    res.render("error",{
+        err : req.params['err']
+    })
+})
 //*******************8 */
 var storage = multer.diskStorage({
     destination:function(req,file,cb){
@@ -281,18 +288,15 @@ router.post('/login_teacher',(req,res)=>{
         {
 
             errors = []
-            errors.push("Email don't exist")
           
-          res.redirect("/teacher");
+          res.redirect("/teacher/error/Email don't exist");
         }
         else {
             req.login(user,function(err){
                 if(err)
                 {
                     errors = []
-                    errors.push("Can't log in")
-                  console.log(err);
-                  res.redirect("/teacher");
+                  res.redirect("/teacher/error/Can't Log In");
                 }
                 else {
                   passport.authenticate("userLocal",{failureRedirect:'/teacher/unauth'})(req,res,function(){
@@ -312,8 +316,7 @@ router.post('/login_teacher',(req,res)=>{
 // if authentication failed
 router.get('/unauth',(req,res)=>{
     errors=[];
-    errors.push("Authentication failed");
-    res.redirect('/teacher')
+    res.redirect('/teacher/error/Authentication failed')
 })
 
 // register a new teacher
@@ -323,32 +326,40 @@ router.post('/register_teacher',(req,res)=>{
         username : req.body.username,
         password : req.body.password
     })
-    teacher.save((err)=>{
-        if(err){
-            console.log(err)
-            errors = []
-            errors.push("User already exist")
-            res.redirect("/teacher");
+    Student.findOne({email : req.body.username},(err,found)=>{
+        if(found)
+        {
+            res.redirect("/teacher/error/User already exist");
            
         }
         else {
-            User.register({username : req.body.username},req.body.password,function(err){
-                if(err)
-                {
+            teacher.save((err)=>{
+                if(err){
+                    console.log(err)
                     errors = []
-                    errors.push("Email already exist")
-                    res.redirect("/teacher");
+                    res.redirect("/teacher/error/User already exist");
+                   
                 }
                 else {
-                    passport.authenticate("userLocal",{failureRedirect:'/teacher/unauth'})(req,res,function(){
-                        errors=[]
-                        res.redirect("/teacher/dashboard");
-                       
-                    })
+                    User.register({username : req.body.username},req.body.password,function(err){
+                        if(err)
+                        {
+                            errors = []
+                            res.redirect("/teacher/error/Email already exist");
+                        }
+                        else {
+                            passport.authenticate("userLocal",{failureRedirect:'/teacher/unauth'})(req,res,function(){
+                                errors=[]
+                                res.redirect("/teacher/dashboard");
+                               
+                            })
+                        }
+                        });
                 }
-                });
+        
+            })
+            
         }
-
     })
     
 })

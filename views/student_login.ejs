@@ -8,9 +8,12 @@
 <link rel="stylesheet" href="/css/user.css">
 <!------ Include the above in your HEAD tag ---------->
 <h1>Student Login</h1>
-<% for(let i = 0;i<err.length;++i){ %>
-  <li> <%=err[i] %> </li>
-   <% } %> 
+<div id="err">
+  <% for(let i = 0;i<err.length;++i){ %>
+    <li> <%=err[i] %> </li>
+     <% } %> 
+  
+</div>
 <div class="login-reg-panel">
 		<div class="login-info-box">
 			<h2>Have an account?</h2>
@@ -54,6 +57,11 @@
 		</div>
 	</div>
     <script>
+
+if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+  document.getElementById("err").style.opacity = 0;
+  console.log("reloaded")
+} 
         
     $(document).ready(function(){
         $('.login-info-box').fadeOut();
