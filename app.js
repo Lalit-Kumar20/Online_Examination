@@ -30,7 +30,10 @@ app.use("/",require("./routes/home"))
 app.use("/student",require("./routes/student"))
 app.use("/teacher",require("./routes/teacher"))
 app.use('/logout',require("./routes/logout"))
-
+app.get("*",(req,res)=>{
+    res.status(400);
+    res.render('error')
+})
 // listening on port 3000
 app.listen(3000,()=>{
     console.log("Server is running on port 3000")

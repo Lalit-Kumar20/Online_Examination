@@ -31,7 +31,7 @@ router.post('/dashboard/join',ensureAuth,(req,res)=>{
 
 router.get('/error/:err',(req,res)=>{
     console.log(req.params['err'])
-    res.render("error",{
+    res.render("error_s",{
         err : req.params['err']
     })
 })
@@ -55,22 +55,13 @@ router.post('/login_student',(req,res)=>{
           errors = []
         }
         else {
-            req.login(user,function(err){
-                if(err)
-                {
-                    errors = []
-                  res.redirect("/student/error/Can't log in");
-                  errors = []
-                }
-                else {
                   passport.authenticate("userLocal",{failureRedirect:'/student/unauth'})(req,res,function(){
                     errors=[]  
                     res.redirect("/student/dashboard");
                       errors = []
         
                   })
-                }
-            })
+            
         }
     })
   

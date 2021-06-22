@@ -26,7 +26,7 @@ router.get('/',(req,res)=>{
 
 router.get('/error/:err',(req,res)=>{
     console.log(req.params['err'])
-    res.render("error",{
+    res.render("error_t",{
         err : req.params['err']
     })
 })
@@ -292,21 +292,13 @@ router.post('/login_teacher',(req,res)=>{
           res.redirect("/teacher/error/Email don't exist");
         }
         else {
-            req.login(user,function(err){
-                if(err)
-                {
-                    errors = []
-                  res.redirect("/teacher/error/Can't Log In");
-                }
-                else {
-                  passport.authenticate("userLocal",{failureRedirect:'/teacher/unauth'})(req,res,function(){
+                passport.authenticate("userLocal",{failureRedirect:'/teacher/unauth'})(req,res,function(){
                     errors=[]  
                     res.redirect("/teacher/dashboard");
                       
         
                   })
-                }
-            })
+              
         }
     })
   
