@@ -5,6 +5,7 @@ const User = require('../models/all')
 const passport = require('passport')
 const {ensureAuth} = require('../config/auth');
 const Teacher = require("../models/teachers");
+const Test = require('../models/test');
 const router = require("express").Router()
 var errors = []
 router.get('/',(req,res)=>{
@@ -26,6 +27,14 @@ router.get('/dashboard/join',ensureAuth,(req,res)=>{
 
 router.post('/dashboard/join',ensureAuth,(req,res)=>{
     const testId = req.body.testId
+    Test.findOne({id : testId},(err,found)=>{
+        if(found){
+            res.render("join_test",{
+                test : found
+            })
+        }
+        
+    })
 })
 
 
