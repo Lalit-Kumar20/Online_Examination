@@ -18,8 +18,11 @@
    <% } %>
    
 <% if(qq[i].im==="yes") {%>
-    <img src="/<%=qq[i].img%>" alt="img" width="60" height="60">
+    <% for(let j = 0;j<qq[i].img.length;++j) {%> 
+    <img src="/<%=qq[i].img[j]%>" alt="img" width="60" height="60">
+    <% } %> 
     <% } %>
+
     
     
    

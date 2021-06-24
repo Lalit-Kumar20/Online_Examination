@@ -50,11 +50,6 @@ router.get('/error/:err',(req,res)=>{
 
 
 router.post('/login_student',(req,res)=>{
-    const user = new User({
-        email : req.body.username,
-        password : req.body.password
-    });
-
     Student.findOne({email : req.body.username},function(err,found){
         if(found===null)
         {
@@ -64,7 +59,7 @@ router.post('/login_student',(req,res)=>{
           errors = []
         }
         else {
-                  passport.authenticate("userLocal",{failureRedirect:'/student/unauth'})(req,res,function(){
+                  passport.authenticate("userLocal_1",{failureRedirect:'/student/unauth'})(req,res,function(){
                     errors=[]  
                     res.redirect("/student/dashboard");
                       errors = []
@@ -76,52 +71,28 @@ router.post('/login_student',(req,res)=>{
   
   
 })
+
+
+
 router.get('/unauth',(req,res)=>{
     errors=[];
     res.redirect('/student/error/Authentication failed')
 })
 router.post('/register_student',(req,res)=>{
  
-    const student = new Student({
-        email : req.body.username,
-        username : req.body.username,
-        roll_no : req.body.roll_no,
-        password : req.body.password
+    const student = new Student({email: req.body.username, username : req.body.username,name : req.body.name});
+    Student.register(student,req.body.password,(err,user)=>{
+if(err) res.redirect('/student/error/User already Exist');
+else {
+    passport.authenticate("userLocal_1",{failureRedirect:'/student/unauth'})(req,res,function(){
+        errors=[]
+        res.redirect("/student/dashboard");
+       errors = []
     })
-    Teacher.findOne({email : req.body.username},(err,found)=>{
-        if(found)
-        {
-            res.redirect("/student/error/User already exists");
-            
-        }
-        else {
-            student.save((err)=>{
-                if(err){
-                    errors = []
-                    res.redirect("/student/error/User already exists");
-                    errors = []
-                    console.log(err);
-                }
-                else {
-                    User.register({username : req.body.username},req.body.password,function(err){
-                        if(err)
-                        {
-                            errors = []
-                            res.redirect("/student/error/Email already exists");
-                            errors = []
-                        }
-                        else {
-                            passport.authenticate("userLocal",{failureRedirect:'/student/unauth'})(req,res,function(){
-                                errors=[]
-                                res.redirect("/student/dashboard");
-                               errors = []
-                            })
-                        }
-                        });
-                }
-            })
-        }
-    })
+
+}
+        })
+    
     
    
 })

@@ -41,7 +41,7 @@ var storage = multer.diskStorage({
 })
 var upload = multer({
     storage : storage
-}).single('file');
+}).array('files',12);
 //************* */
 
 // after login /teacher/dashboard
@@ -142,7 +142,11 @@ router.get('/dashboard/test/delete/:id/:i',ensureAuth,(req,res)=>{
         var ob = found.questions
                 //file removed
         if(ob[req.params['i']].im==="yes"){
-           fs.unlinkSync("public/"+ob[req.params['i']].img)
+            for(let j = 0;j<ob[req.params['i']].img.length;++j)
+            {
+                fs.unlinkSync("public/"+ob[req.params['i']].img[j])
+            }
+           
         }    
               
         
@@ -168,7 +172,11 @@ router.get('/dashboard/test/delete/:id',(req,res)=>{
             {
                if(found.questions[i].im==="yes")
                {
-                fs.unlinkSync("public/"+found.questions[i].img)
+                   for(let j = 0;j<found.questions[i].img.length;++j)
+                   {
+                    fs.unlinkSync("public/"+found.questions[i].img[j])
+                   }
+                
                }      
             }
         }
@@ -186,7 +194,7 @@ router.get('/dashboard/test/delete/:id',(req,res)=>{
 router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
     const id = req.params.id
     //without image
-    if(typeof req.file === "undefined")
+    if(req.files.length === 0)
    {
     var ob = {
         q : req.body.ques,
@@ -209,15 +217,20 @@ router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
 }
 // with image
  else {
+    var arr = [];
+    for(let i = 0;i<req.files.length;++i)
+    {
+          arr.push(req.files[i].filename)
+    }
     var ob = {
-        q : req.body.ques,
+        q : req.body.ques,  
         a : req.body.qa,
         b : req.body.qb,
         c : req.body.qc,
         d : req.body.qd,
         im : "yes",
         type : "mcq",
-        img : req.file.filename
+        img : arr
     }   
     
     Test.findOne({id : id},(err,found)=>{
@@ -235,7 +248,7 @@ router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
  router.post('/dashboard/test/sub/:id',ensureAuth,upload,(req,res)=>{
     const id = req.params.id
     //without image
-    if(typeof req.file === "undefined")
+    if(req.files.length === 0)
    {
     var ob = {
         q : req.body.ques,
@@ -254,11 +267,16 @@ router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
 }
 // with image
  else {
+     var arr = [];
+     for(let i = 0;i<req.files.length;++i)
+     {
+           arr.push(req.files[i].filename)
+     }
     var ob = {
         q : req.body.ques,
         im : "yes",
         type : "sub",
-        img : req.file.filename
+        img : arr
     }   
     
     Test.findOne({id : id},(err,found)=>{
@@ -277,10 +295,7 @@ router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
 
 // login method
 router.post('/login_teacher',(req,res)=>{
-    const user = new User({
-        email : req.body.username,
-        password : req.body.password
-    });
+    
 
     //checking if user mail exist in teacher database or not
     Teacher.findOne({email : req.body.username},function(err,found){
@@ -292,7 +307,7 @@ router.post('/login_teacher',(req,res)=>{
           res.redirect("/teacher/error/Email don't exist");
         }
         else {
-                passport.authenticate("userLocal",{failureRedirect:'/teacher/unauth'})(req,res,function(){
+                passport.authenticate("userLocal_2",{failureRedirect:'/teacher/unauth'})(req,res,function(){
                     errors=[]  
                     res.redirect("/teacher/dashboard");
                       
@@ -313,46 +328,19 @@ router.get('/unauth',(req,res)=>{
 
 // register a new teacher
 router.post('/register_teacher',(req,res)=>{
-    const teacher = new Teacher({
-        email : req.body.username,
-        username : req.body.username,
-        password : req.body.password
+    
+    const teacher = new Teacher({email: req.body.username, username : req.body.username,name : req.body.name});
+    Teacher.register(teacher,req.body.password,(err,user)=>{
+if(err) res.redirect('/teacher/error/User already Exist');
+else {
+    passport.authenticate("userLocal_2",{failureRedirect:'/teacher/unauth'})(req,res,function(){
+        errors=[]
+        res.redirect("/teacher/dashboard");
+       errors = []
     })
-    Student.findOne({email : req.body.username},(err,found)=>{
-        if(found)
-        {
-            res.redirect("/teacher/error/User already exist");
-           
-        }
-        else {
-            teacher.save((err)=>{
-                if(err){
-                    console.log(err)
-                    errors = []
-                    res.redirect("/teacher/error/User already exist");
-                   
-                }
-                else {
-                    User.register({username : req.body.username},req.body.password,function(err){
-                        if(err)
-                        {
-                            errors = []
-                            res.redirect("/teacher/error/Email already exist");
-                        }
-                        else {
-                            passport.authenticate("userLocal",{failureRedirect:'/teacher/unauth'})(req,res,function(){
-                                errors=[]
-                                res.redirect("/teacher/dashboard");
-                               
-                            })
-                        }
-                        });
-                }
-        
-            })
-            
-        }
-    })
+
+}
+        })
     
 })
 module.exports = router

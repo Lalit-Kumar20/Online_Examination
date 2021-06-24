@@ -7,6 +7,8 @@ mongoose.connect("mongodb://localhost:27017/userDBS4",{useNewUrlParser:true,useU
 mongoose.set("useCreateIndex",true);
 const teacherSchema = new mongoose.Schema({
     email : String,
+    name : String,
+    googleId : String,
     username : String,
     password : String
 });
