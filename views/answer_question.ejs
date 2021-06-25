@@ -1,0 +1,19 @@
+<h1>Ques : <%= q.q %> </h1>
+<% if(q.type==="mcq") {%> 
+    <h4>a) :<%=q.a%></h4>
+    <h4>b) :<%=q.b%></h4>
+    <h4>c) :<%=q.c%></h4>
+    <h4>d) :<%=q.d%></h4>
+ <% } %>
+ <% if(q.im==="yes"){ %> 
+     <% for(let i = 0;i<q.img.length;++i) {%>
+        <img src="/<%= q.img[i] %>" alt="" width="100" height = "100">
+        <% } %>  
+        <% } %> 
+<form action="/student/dashboard/answer/<%= id %>/<%= num %>" method="POST" enctype="multipart/form-data">
+<input type="text" name="answer" placeholder="Answer">
+<input type="file" name="files" multiple>
+<button type="submit">Answer</button>
+</form>
+
+    

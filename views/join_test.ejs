@@ -1,12 +1,16 @@
-<h1><%= test.name %> </h1>
-<h3><%= test.by %> </h3>
+<h1> Name : <%= test.name %> </h1>
+<h3>Teacher : <%= test.by %> </h3>
 
 <% for(let i = 0;i<test.questions.length;++i) { %>
-   <div class="ques">
+   <hr>
+    <div class="ques">
        <h3><%= test.questions[i].q %> </h3>
-       <a href="#">Answer</a>
+       <a href="/student/dashboard/join/<%= test.id %>/<%= i %>">Answer</a>
+       <% if(Object.keys(ans.answers[i]).length!==0){ %>
+        <h4>Answered</h4>
+        <% } %>  
        <a href="#">Reset</a>
    </div>
-
+<hr>
 <% } %> 
  
