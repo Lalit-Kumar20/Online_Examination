@@ -52,15 +52,14 @@ router.get('/dashboard/join/:id/:i',ensureAuth,(req,res)=>{
     })
 })
 router.post('/dashboard/answer/:id/:i',ensureAuth,upload,(req,res)=>{
-    console.log(req.params['id'])
-    console.log(req.params['i'])
+    
     var arr = [];
     for(let i = 0;i<req.files.length;++i){
         arr.push(req.files[i].filename);
     }
     const user = req.user.username;
     Answer.findOne({testId : req.params['id'],name : user},(err,found)=>{
-        console.log(found)
+      //  console.log(found)
         var ans = found.answers
         ans[req.params['i']] = {
             answer : req.body.answer,
@@ -72,7 +71,19 @@ router.post('/dashboard/answer/:id/:i',ensureAuth,upload,(req,res)=>{
         })
     })
 })
+router.get('/dashboard/join/reset/:id/:i',ensureAuth,(req,res)=>{
+const user = req.user.username;
+Answer.findOne({testId : req.params['id'],name : user},(err,found)=>{
+      var ans = found.answers
+      ans[req.params['i']] = {}
+      Answer.updateOne({testId : req.params['id'],name : user},{answers : ans},(err)=>{
+          if(err) console.log(err)
+          else res.redirect('/student/dashboard/join/'+req.params['id']);
+      })
+  })
 
+
+})
 router.get('/dashboard/join/:id',ensureAuth,(req,res)=>{
     const testId = req.params['id']
     Test.findOne({id : testId},(err,found)=>{
