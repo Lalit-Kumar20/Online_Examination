@@ -5,7 +5,8 @@ mongoose.set("useCreateIndex",true);
 const answerSchema = new mongoose.Schema({
    name: String,
    testId : String,
-   answers : Array
+   answers : Array,
+   done : Boolean
 });
 const Answer = new mongoose.model("Answer",answerSchema);
 module.exports = Answer;

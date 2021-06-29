@@ -1,7 +1,7 @@
   // /student route
-  const path = require('path')
-  const fs = require('fs')
-  const multer = require('multer')
+const path = require('path')
+const fs = require('fs')
+const multer = require('multer')
 const Student = require("../models/students");
 const User = require('../models/all')
 const passport = require('passport')
@@ -97,7 +97,9 @@ router.get('/dashboard/join/:id',ensureAuth,(req,res)=>{
                     const answer = new Answer({
                         name : req.user.username,
                         testId : testId,
-                        answers : arr
+                        answers : arr,
+                        done : false
+
                     })
                     answer.save((err)=>{
                         if(err) console.log(err)
@@ -111,10 +113,18 @@ router.get('/dashboard/join/:id',ensureAuth,(req,res)=>{
                     })
                 }
                 else {
+                    if(fund.done){
+                      res.render("alreadysubmitted",{
+                          err : "You already submitted"
+                      })     
+                   
+                    }
+                   else {
                     res.render("join_test",{
                         ans : fund,
                         test : found
                     })
+                   } 
 
                 }
             })
@@ -143,7 +153,18 @@ router.get('/error/:err',(req,res)=>{
 
 
 
-
+router.get('/submit/:id',ensureAuth,(req,res)=>{    
+Answer.updateOne({testId : req.params.id,name : req.user.username},{done : true},(err)=>{
+    if(err) {
+        res.render("alreadysubmitted",{
+            err : "Cannot submit test"
+        })     
+    }
+    else {
+        res.redirect('/student/dashboard')
+    }
+})
+})
 
 router.post('/login_student',(req,res)=>{
     Student.findOne({email : req.body.username},function(err,found){
