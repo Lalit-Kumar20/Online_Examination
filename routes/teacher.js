@@ -6,6 +6,7 @@ const Teacher = require("../models/teachers");
 const User = require('../models/all')
 const Test = require('../models/test')
 const passport = require('passport')
+const Answer = require('../models/answer')
 const {ensureAuth} = require('../config/auth')
 const { 
     v1: uuidv1,
@@ -30,6 +31,8 @@ router.get('/error/:err',(req,res)=>{
         err : req.params['err']
     })
 })
+
+
 //*******************8 */
 var storage = multer.diskStorage({
     destination:function(req,file,cb){
@@ -54,6 +57,32 @@ router.get('/dashboard',ensureAuth,(req,res)=>{
 
     
     //
+})
+
+router.get('/view',ensureAuth,(req,res)=>{
+res.render('view_enter_id');
+})
+router.post('/view',ensureAuth,(req,res)=>{
+    Answer.find({testId : req.body.id,done : true},(err,found)=>{
+        if(found){
+            res.render("view_student_answers",{
+                ans : found
+            })
+        }
+    })
+})
+router.get('/view/:id',ensureAuth,(req,res)=>{
+    const id = req.params.id;
+    Answer.findOne({_id : id},(err,found)=>{
+        if(found){
+            Test.findOne({id : found.testId},(err,f)=>{
+                res.render("view_full_answer",{
+                    ans : found.answers,
+                    ques : f.questions
+                })
+            })
+        }
+    })
 })
 
 router.get('/dashboard/test/stop/:id',ensureAuth,(req,res)=>{
