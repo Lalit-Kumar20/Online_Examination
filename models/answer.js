@@ -8,7 +8,8 @@ const answerSchema = new mongoose.Schema({
    answers : Array,
    done : Boolean,
    checked : Boolean,
-   marks : String
+   marks : String,
+   total_marks:String
 });
 const Answer = new mongoose.model("Answer",answerSchema);
 module.exports = Answer;

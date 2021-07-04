@@ -7,7 +7,8 @@ const testSchema = new mongoose.Schema({
     questions : Array,
     by : String,
     name : String,
-    status : Boolean
+    status : Boolean,
+    total_marks : String
 });
 const Test = new mongoose.model("Tests",testSchema);
 module.exports = Test;

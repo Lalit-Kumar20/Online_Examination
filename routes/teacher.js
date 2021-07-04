@@ -122,7 +122,8 @@ const test = new Test({
     questions : [],
     by : req.user.username,
     name : req.body.testname,
-    status : false
+    status : false,
+    total_marks : req.body.total_price
 })
 test.save((err)=>{
     if(err) console.log(err)
@@ -153,7 +154,8 @@ router.get('/dashboard/test/:id',ensureAuth,(req,res)=>{
     res.render('test',{
            id : req.params['id'],
            qq : found.questions,
-           name : found.name
+           name : found.name,
+           total_marks : found.total_marks
        })
     }
    })

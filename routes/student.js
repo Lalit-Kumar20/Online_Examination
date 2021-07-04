@@ -111,7 +111,8 @@ router.get('/dashboard/join/:id',ensureAuth,(req,res)=>{
                         answers : arr,
                         done : false,
                         checked : false,
-                        marks : 0
+                        marks : 0,
+                        total_marks : found.total_marks
 
                     })
                     answer.save((err)=>{
