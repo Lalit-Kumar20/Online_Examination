@@ -1,5 +1,8 @@
 <% console.log(ans) %> 
 <% for(let i = 0;i<ans.length;++i) {%> 
      <h4><%= ans[i].name %> </h4>
+     <% if(ans[i].checked){ %>
+          CHecked
+          <% } %>  
      <a href="/teacher/view/<%= ans[i]._id %>">View</a>
     <% } %> 

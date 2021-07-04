@@ -6,7 +6,9 @@ const answerSchema = new mongoose.Schema({
    name: String,
    testId : String,
    answers : Array,
-   done : Boolean
+   done : Boolean,
+   checked : Boolean,
+   marks : String
 });
 const Answer = new mongoose.model("Answer",answerSchema);
 module.exports = Answer;

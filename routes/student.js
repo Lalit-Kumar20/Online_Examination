@@ -84,10 +84,21 @@ Answer.findOne({testId : req.params['id'],name : user},(err,found)=>{
 
 
 })
+
+router.get('/dashboard/marks',ensureAuth,(req,res)=>{
+    Answer.find({name : req.user.username,checked:true},(err,found)=>{
+        if(found){
+            res.render('view_marks',{
+                ans : found
+            })
+        }
+    })
+})
+
 router.get('/dashboard/join/:id',ensureAuth,(req,res)=>{
     const testId = req.params['id']
     Test.findOne({id : testId},(err,found)=>{
-        if(found){
+        if(found && found.status){
             Answer.findOne({testId : testId,name : req.user.username},(err,fund)=>{
                 
                 if(!fund){
@@ -98,7 +109,9 @@ router.get('/dashboard/join/:id',ensureAuth,(req,res)=>{
                         name : req.user.username,
                         testId : testId,
                         answers : arr,
-                        done : false
+                        done : false,
+                        checked : false,
+                        marks : 0
 
                     })
                     answer.save((err)=>{
@@ -130,9 +143,16 @@ router.get('/dashboard/join/:id',ensureAuth,(req,res)=>{
             })
             
         }
+        else if(found){
+            res.render("alreadysubmitted",{
+                err : "Test is Over"
+            })
+        }
         else {
 
-            res.redirect('/student/dashboard')
+            res.render("alreadysubmitted",{
+                err : "Wrong test id"
+            })   
         }
         
     })
@@ -172,7 +192,7 @@ router.post('/login_student',(req,res)=>{
         {
             errors = []
           
-          res.redirect("/student/error/Email dont exist");
+          res.redirect("/student/error/Email doesn't exist");
           errors = []
         }
         else {
@@ -197,20 +217,29 @@ router.get('/unauth',(req,res)=>{
     res.redirect('/student/error/Authentication failed')
 })
 router.post('/register_student',(req,res)=>{
- 
-    const student = new Student({email: req.body.username, username : req.body.username,name : req.body.name});
-    Student.register(student,req.body.password,(err,user)=>{
-if(err) res.redirect('/student/error/User already Exist');
-else {
-    passport.authenticate("userLocal_1",{failureRedirect:'/student/unauth'})(req,res,function(){
-        errors=[]
-        res.redirect("/student/dashboard");
-       errors = []
-    })
 
-}
-        })
-    
+    Teacher.findOne({username : req.body.username},(err,found)=>{
+        if(found){
+           res.redirect('/student/error/Account already exists');
+        }
+        else {
+            const student = new Student({email: req.body.username, username : req.body.username,name : req.body.name});
+            Student.register(student,req.body.password,(err,user)=>{
+        if(err) res.redirect('/student/error/User already Exist');
+        else {
+            passport.authenticate("userLocal_1",{failureRedirect:'/student/unauth'})(req,res,function(){
+                errors=[]
+                res.redirect("/student/dashboard");
+               errors = []
+            })
+        
+        }
+                })
+            
+        }
+    })
+ 
+   
     
    
 })

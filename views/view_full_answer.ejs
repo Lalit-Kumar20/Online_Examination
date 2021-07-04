@@ -22,3 +22,9 @@
         <% } %>
         <hr> 
     <% } %>   
+
+
+    <form action="/teacher/view/<%= idd %>" method="POST">
+        <input type="text" name = "marks" placeholder="marks">
+        <button type="submit">Give marks</button>
+    </form>

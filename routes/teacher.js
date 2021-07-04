@@ -78,10 +78,19 @@ router.get('/view/:id',ensureAuth,(req,res)=>{
             Test.findOne({id : found.testId},(err,f)=>{
                 res.render("view_full_answer",{
                     ans : found.answers,
-                    ques : f.questions
+                    ques : f.questions,
+                    idd: req.params.id
                 })
             })
         }
+    })
+})
+router.post('/view/:idd',ensureAuth,(req,res)=>{
+    Answer.updateOne({_id : req.params.idd},{marks : req.body.marks,checked : true},(err)=>{
+        if(err){
+            console.log(err)
+        }
+        res.redirect('/teacher/view')
     })
 })
 
@@ -333,7 +342,7 @@ router.post('/login_teacher',(req,res)=>{
 
             errors = []
           
-          res.redirect("/teacher/error/Email don't exist");
+          res.redirect("/teacher/error/Email doesn't exist");
         }
         else {
                 passport.authenticate("userLocal_2",{failureRedirect:'/teacher/unauth'})(req,res,function(){
@@ -357,19 +366,26 @@ router.get('/unauth',(req,res)=>{
 
 // register a new teacher
 router.post('/register_teacher',(req,res)=>{
-    
-    const teacher = new Teacher({email: req.body.username, username : req.body.username,name : req.body.name});
-    Teacher.register(teacher,req.body.password,(err,user)=>{
-if(err) res.redirect('/teacher/error/User already Exist');
-else {
-    passport.authenticate("userLocal_2",{failureRedirect:'/teacher/unauth'})(req,res,function(){
-        errors=[]
-        res.redirect("/teacher/dashboard");
-       errors = []
+    Student.findOne({username : req.body.username},(err,found)=>{
+        if(found){
+            res.redirect('/teacher/error/Account already exists')
+        }
+        else {
+            const teacher = new Teacher({email: req.body.username, username : req.body.username,name : req.body.name});
+            Teacher.register(teacher,req.body.password,(err,user)=>{
+        if(err) res.redirect('/teacher/error/User already Exist');
+        else {
+            passport.authenticate("userLocal_2",{failureRedirect:'/teacher/unauth'})(req,res,function(){
+                errors=[]
+                res.redirect("/teacher/dashboard");
+               errors = []
+            })
+        
+        }
+                })
+        }
     })
-
-}
-        })
+   
     
 })
 module.exports = router
