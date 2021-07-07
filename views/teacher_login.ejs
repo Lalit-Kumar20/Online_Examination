@@ -1,4 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teacher Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <div class="registration-form" style="position: absolute; width: 90vw;top: 5vh;" id="f1">
+        <form action="/teacher/register_teacher" method="POST">
+            <div class="form-icon">
+                <span><i class="icon icon-user"></i></span>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control item" id="username" placeholder="Username" name="username" required>
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control item" id="username" placeholder="Name" name="name" required>
+          </div>
+         
+            <div class="form-group">
+                <input type="password" class="form-control item" id="password" placeholder="Password" name="password" required>
+            </div>
+           
+            <div class="form-group">
+                <button type="submit" class="btn btn-block create-account">Create Account</button>
+            </div>
+            <br>
+          
+            <div class="form-group">
+              Already Have an account  &nbsp;&nbsp; &nbsp;<button type="button" class="btn" id = "bt" style="background: none;color: #47597E; text-decoration: underline;">SignIn</button>
+              
+          </div>
+        </form>
+        <div class="social-media">
+            <h5>Sign up with Google</h5>
+            <div class="social-icons">
+              <a href="/te/auth/google"><i class="icon-social-google" title="Google"></i></a>
+            </div>
+        </div>
+    </div>
 
+
+    
+    <div class="registration-form" style="visibility: collapse;width: 90vw;top: 5vh;" id="f2">
+      <form action="/teacher/login_teacher" method="POST">
+          <div class="form-icon">
+              <span><i class="icon icon-user"></i></span>
+          </div>
+          <div class="form-group">
+              <input type="text" class="form-control item" id="username" placeholder="Username" name="username" required>
+          </div>
+          <div class="form-group">
+              <input type="password" class="form-control item" id="password" placeholder="Password" name="password" required>
+          </div>
+          <div class="form-group">
+              <button type="submit" class="btn btn-block create-account">Login</button>
+          </div>
+          <div class="form-group">
+            Create account here   &nbsp;&nbsp; &nbsp;<button type="button" class="btn" id = "bt2" style="background: none;color: #47597E; text-decoration: underline;">SignUp</button>
+
+        </div>
+      </form>
+      <div class="social-media">
+          <h5>Sign up with Google</h5>
+          <div class="social-icons">
+              <a href="/te/auth/google"><i class="icon-social-google" title="Google"></i></a>
+              </div>
+      </div>
+  </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+<!-- 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -6,7 +91,6 @@
 
 <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">  
 <link rel="stylesheet" href="/css/user.css">
-<!------ Include the above in your HEAD tag ---------->
 <h1>Teacher Login</h1>
 <div id = "err">
   <% for(let i = 0;i<err.length;++i){ %>
@@ -58,104 +142,42 @@
 				
 			</div>
 		</div>
-	</div>
+	</div> -->
     <script>
-        if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
-  document.getElementById("err").style.opacity = 0;
-} 
-    $(document).ready(function(){
-        $('.login-info-box').fadeOut();
-        $('.login-show').addClass('show-log-panel');
-    });
-    
-    
-    $('.login-reg-panel input[type="radio"]').on('change', function() {
-        if($('#log-login-show').is(':checked')) {
-            $('.register-info-box').fadeOut(); 
-            $('.login-info-box').fadeIn();
-            
-            $('.white-panel').addClass('right-log');
-            $('.register-show').addClass('show-log-panel');
-            $('.login-show').removeClass('show-log-panel');
-            
-        }
-        else if($('#log-reg-show').is(':checked')) {
-            $('.register-info-box').fadeIn();
-            $('.login-info-box').fadeOut();
-            
-            $('.white-panel').removeClass('right-log');
-            
-            $('.login-show').addClass('show-log-panel');
-            $('.register-show').removeClass('show-log-panel');
-        }
-    });
+      
+
+    document.getElementById('bt').addEventListener("click",()=>{
+      if(document.getElementById('f2').style.visibility === "collapse"){
+
+      
+      document.getElementById('f2').style.visibility = "visible"
+      document.getElementById('f1').style.visibility = "collapse"
+      }  
+      else {
+        document.getElementById('f2').style.visibility = "collapse"
+      document.getElementById('f1').style.visibility = "visible"
+        
+      }
+    }
+      )
+      document.getElementById('bt2').addEventListener("click",()=>{
+      if(document.getElementById('f2').style.visibility === "collapse"){
+
+      
+      document.getElementById('f2').style.visibility = "visible"
+      document.getElementById('f1').style.visibility = "collapse"
+      }  
+      else {
+        document.getElementById('f2').style.visibility = "collapse"
+      document.getElementById('f1').style.visibility = "visible"
+        
+      }
+    }
+      )
+      $(document).ready(function(){
+  $('#birth-date').mask('00/00/0000');
+  $('#phone-number').mask('0000-0000');
+ })
       
     
 </script>
-
-
-<footer class="text-center text-white fixed-bottom" style="background-color: #21081a;">
-  
-    <!-- Grid container -->
-    <div class="container p-4">
-      <a
-      class="btn btn-primary btn-floating m-1"
-      style="background-color: #3b5998; border-radius: 50%;"
-      href="https://facebook.com/"
-      role="button"
-      ><i class="fab fa-facebook-f"></i
-    ></a>
-  
-    <!-- Twitter -->
-    <a
-      class="btn btn-primary btn-floating m-1"
-      style="background-color: #55acee; border-radius: 50%;"
-      href="https://twitter.com/?lang=en"
-      role="button"
-      ><i class="fab fa-twitter"></i
-    ></a>
-  
-    <!-- Google -->
-    <a
-      class="btn btn-primary btn-floating m-1"
-      style="background-color: #dd4b39; border-radius: 50%;"
-      href="https://google.com/"
-      role="button"
-      ><i class="fab fa-google"></i
-    ></a>
-  
-    <!-- Instagram -->
-    <a
-      class="btn btn-primary btn-floating m-1"
-      style="background-color: #ac2bac; border-radius: 50%;"
-      href="https://www.instagram.com/"
-      role="button"
-      >
-      <i class="fab fa-instagram"></i>
-    </a>
-  
-    <!-- Linkedin -->
-    <a
-      class="btn btn-primary btn-floating m-1"
-      style="background-color: #0082ca; border-radius: 50%;"
-      href="https://www.linkedin.com/in/lalit-kumar-5b80b8170/"
-      role="button"
-      ><i class="fab fa-linkedin-in"></i
-    ></a>
-    <!-- Github -->
-    <a
-      class="btn btn-primary btn-floating m-1"
-      style="background-color: #333333; border-radius: 50%;"
-      href="https://github.com/Lalit-Kumar20/Software-Engineering-Project"
-      role="button"
-      ><i class="fab fa-github"></i
-    ></a>
-    </div>
-    <!-- Grid container -->
-  
-    <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      
-      Made With ❤  </div>
-    <!-- Copyright -->
-  </footer>

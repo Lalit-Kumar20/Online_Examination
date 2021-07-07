@@ -230,6 +230,7 @@ router.get('/dashboard/test/delete/:id',(req,res)=>{
 // delete test complete
 // adding mcq question
 
+
 // important add params in the end 
 router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
     const id = req.params.id
@@ -260,7 +261,7 @@ router.post('/dashboard/test/addmcq/:id',ensureAuth,upload,(req,res)=>{
     var arr = [];
     for(let i = 0;i<req.files.length;++i)
     {
-          arr.push(req.files[i].filename)
+     arr.push(req.files[i].filename)
     }
     var ob = {
         q : req.body.ques,  

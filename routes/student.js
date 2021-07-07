@@ -1,4 +1,13 @@
   // /student route
+
+
+
+  ///to do
+  /*
+  change password
+  styling
+  responsive
+  */
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer')
@@ -75,6 +84,9 @@ router.get('/dashboard/join/reset/:id/:i',ensureAuth,(req,res)=>{
 const user = req.user.username;
 Answer.findOne({testId : req.params['id'],name : user},(err,found)=>{
       var ans = found.answers
+      for(let j = 0;j<ans[req.params['i']].img.length;++j){
+        fs.unlinkSync("public/"+ans[req.params['i']].img[j])
+      }
       ans[req.params['i']] = {}
       Answer.updateOne({testId : req.params['id'],name : user},{answers : ans},(err)=>{
           if(err) console.log(err)
