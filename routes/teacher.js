@@ -50,7 +50,7 @@ var upload = multer({
 // after login /teacher/dashboard
 router.get('/dashboard',ensureAuth,(req,res)=>{
     res.render("dash_board_teacher",{
-        u : req.user.username
+        u : req.user.name
     })
 
     //

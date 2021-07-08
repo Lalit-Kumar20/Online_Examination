@@ -27,7 +27,7 @@ router.get('/',(req,res)=>{
 })
 router.get('/dashboard',ensureAuth,(req,res)=>{
     res.render("dash_board_student",{
-        u : req.user.username
+        u : req.user.name
     })
 
 })
