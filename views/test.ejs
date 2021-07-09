@@ -1,35 +1,238 @@
-<h1>Test Created</h1>
-<h2><%= name %> </h2>
-<h3>Total marks : <%= total_marks %>  </h3>
-<a href="/teacher/dashboard/test/<%= id %>/mcq">Add MCQ question</a>
-<a href="/teacher/dashboard/test/<%= id %>/sub">Add Subjective Question</a>
-<a href="/teacher/dashboard/test/delete/<%= id %>">Delete Test</a>
-<a href="/teacher/dashboard">Save</a>
-<%= id  %>
+<link rel = "icon" href = "/logo.png" 
+        type = "image/x-icon">
+        <title>Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+<div class="image-viewer" style="visibility: collapse;">
+    <img src="" alt="" id = "id">
+</div>
+<button class="close" style="position: fixed;visibility: collapse;cursor: pointer;"><i class="fas fa-times"></i></button>
+
+
+<img src="/create-test.png" style="transform: scale(0.7);" alt=""  height="300" id ="logo">
+<div class="head" style="width: 100vw;transform: scale(0.8);">
+    <h1 style="font-family: 'Ubuntu', sans-serif;font-size: 50px;color: #EFF8FF;float: left;" class="name">Test Name : <%= name %> </h1>
+    <h2 style="font-family: 'Ubuntu', sans-serif; font-size: 40px; color:#EFF8FF;float: right;" class="marks">Total marks : <%= total_marks %>  </h2>
+    
+</div>
+<div class="mid" style="width: 100vw; transform: scale(0.8); ">
+    <h2 style="font-family: 'Ubuntu', sans-serif; font-size: 40px; color:#EFF8FF;float: left;" class="marks">Test Id : <%= id %>  </h2>
+    
+</div>
+
+
+<div class="query">
+    <a href="/teacher/dashboard/test/<%= id %>/mcq" style="color: white;" class="button" id = "addmcq">Add MCQ Question</a>
+    <a href="/teacher/dashboard/test/<%= id %>/sub" style="color: white;"class="button" id = "addsub">Add Subjective Question</a>
+    <a href="/teacher/dashboard/test/delete/<%= id %>" style="color: white;"class="button" id = "delete">Delete Test</a>
+    <a href="/teacher/dashboard" style="color: white;" class="button" id = "save">Save</a>
+    
+</div>
  
-<% for(let i = 0;i<qq.length;++i) {%>
-    <hr> 
-<form action="/teacher/dashboard/test/delete/<%=id%>/<%=i%>" method="GET">
-<h2><%=qq[i].q%> </h2>
-<% if(qq[i].type==="mcq") {%>
-   <h3><%= qq[i].a %> </h3>
-   <h3><%= qq[i].b %> </h3>
-   <h3><%= qq[i].c %> </h3>
-   <h3><%= qq[i].d %> </h3>
-   <% } %>
-   
-<% if(qq[i].im==="yes") {%>
-    <% for(let j = 0;j<qq[i].img.length;++j) {%>
-       <img src="/<%=qq[i].img[j]%>" alt="img" width="60" height="60">
-    <% } %> 
-    <% } %>
+
+<div class="low" style="width: 100vw;transform: scale(0.8);">
+    <% for(let i = 0;i<qq.length;++i) {%>
+
+
+           
+        <div class="test" style="border: 3px solid #EFF8FF;padding: 30px;">
+               <form action="/teacher/dashboard/test/delete/<%=id%>/<%=i%>" method="GET">
+                
+                <div class="test-mid">
+                    <h1 style="font-family: 'Ubuntu', sans-serif;font-size: 50px;color: #EFF8FF;">Q.) <%=qq[i].q%> </h1>
+                    <% if(qq[i].type==="mcq") {%>
+                       <h2 style="font-family: 'Ubuntu', sans-serif;font-size: 50px;color: #EFF8FF;">a)  <%= qq[i].a %> </h2>
+                       <h2 style="font-family: 'Ubuntu', sans-serif;font-size: 50px;color: #EFF8FF;">b)  <%= qq[i].b %> </h2>
+                       <h2 style="font-family: 'Ubuntu', sans-serif;font-size: 50px;color: #EFF8FF;">c)  <%= qq[i].c %> </h2>
+                       <h2 style="font-family: 'Ubuntu', sans-serif;font-size: 50px;color: #EFF8FF;">d)  <%= qq[i].d %> </h2>
+                       <% } %>
+                       
+                    <% if(qq[i].im==="yes") {%>
+                        <% for(let j = 0;j<qq[i].img.length;++j) {%>
+                        <img src="/<%=qq[i].img[j]%>" alt="img" width="150" height="150" onclick="myfun(this)" style="cursor: pointer;">
+                        <% } %> 
+                        <% } %>
+                    
+                </div>
+                   
+                <div class="but" style="width: 100%;display: flex;flex-direction: row-reverse;">
+                    <button type="submit" class="button" style="border-radius: 20px;;" id = "b"><i class="fas fa-trash"></i></button>
+
+                </div>          
+                    
+                   
+                </form> 
+                
+        </div>
+        <br>
+        <br>
+        <br>
+        <% } %> 
+        
+</div>
+
+
+<style>
+    .img {
+        transition: all 0.4s;
+    }
+    .img:hover {
+        cursor: pointer;
+        opacity: 0.7;
+     transform: scale(1.1);
+    }
+    .button {
+        width: 400px;
+        height: 100px;
+        display: flex;
+        border-radius: 30px;
+        justify-content: center;
+        background-color: #47597E;
+        transition: ease-out 0.5s;
+        font-size: 30px;
+        transform: scale(0.8);
+        font-family: 'Ubuntu', sans-serif;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        align-items: center;
+        color: #DBE6FD;
+    }
+
+    .button:hover {
+
+        color: #D1D9D9;
+        background-color: #867AE9;
+    }
+.image-viewer{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.8);
+    
+}
+.close {
+    top: 10px;
+    background: transparent;
+    border: 2px solid#47597E;
+;
+    border-radius: 50%;
+    color: #DBE6FD;
+
+    width: 60px;
+    font-size: 40px;
+    height: 60px;
+}
+.close:hover{
+    color: #D1D9D9;
+        background-color: #867AE9;
+    
+}
 
     
     
-   
-<button type="submit">Delete</button>
-</form> 
-<hr> 
-<% } %> 
+    body{
+        
+  background-color: #192B40;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+    }
+    .query{
+        display: flex;
+        width: 100vw;
+        transform: scale(0.8);
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    @media only screen and (max-width: 720px) { 
+      .query {
+          flex-direction: column;
+          justify-content: space-between;
+          height: 60vh;
+          align-items: center;
+      }
+     .name,.marks {
+         float: none;
+     }
+     .marks {
+         padding-right: 0;
+     }
+     .name {
+         padding-left: 0;
+     }
+     .head {
+         display: flex;
+         flex-direction: column;
+         justify-content: center;
+         align-items: center;
+     }
+    }
+    #id {
+        object-fit: contain;
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
+<script>
 
+function myfun(img){
+    document.querySelector('.image-viewer').style.visibility = "visible"
+    
+    document.getElementById('id').src  = img.src
+    document.querySelector('.close').style.visibility = "visible"
+
+     document.getElementById('logo').style.visibility = "collapse";
+     document.querySelector('.head').style.visibility = "collapse"
+     document.querySelector('.mid').style.visibility = "collapse"
+     document.querySelector('.query').style.visibility = "collapse"
+     document.querySelector('.low').style.visibility = "collapse"
+}
+
+document.querySelector('.close').addEventListener("click",()=>{
+    
+    document.getElementById('id').src  = ""
+    document.querySelector('.close').style.visibility = "collapse"
+    document.querySelector('.image-viewer').style.visibility = "collapse"
+    document.getElementById('logo').style.visibility = "visible";
+     document.querySelector('.head').style.visibility = "visible"
+     document.querySelector('.mid').style.visibility = "visible"
+     document.querySelector('.query').style.visibility = "visible"
+     document.querySelector('.low').style.visibility = "visible"
+
+})
+    document.getElementById("addmcq").addEventListener("mouseenter",()=>{
+        document.getElementById("addmcq").innerHTML = "<i class='far fa-file-alt'></i>"
+    })
+    document.getElementById("addmcq").addEventListener("mouseleave",()=>{
+        document.getElementById("addmcq").innerHTML = "Add MCQ Question"
+    })
+
+    document.getElementById("addsub").addEventListener("mouseenter",()=>{
+        document.getElementById("addsub").innerHTML = "<i class='far fa-file-alt'></i>"
+    })
+    document.getElementById("addsub").addEventListener("mouseleave",()=>{
+        document.getElementById("addsub").innerHTML = "Add Subjective Question"
+    })
+    document.getElementById("delete").addEventListener("mouseenter",()=>{
+        document.getElementById("delete").innerHTML = "<i class='fas fa-trash-alt'></i>"
+    })
+    document.getElementById("delete").addEventListener("mouseleave",()=>{
+        document.getElementById("delete").innerHTML = "Delete Test"
+    })
+
+    document.getElementById("save").addEventListener("mouseenter",()=>{
+        document.getElementById("save").innerHTML = "<i class='fas fa-save'></i>"
+    })
+    document.getElementById("save").addEventListener("mouseleave",()=>{
+        document.getElementById("save").innerHTML = "Save"
+    })
+</script>
