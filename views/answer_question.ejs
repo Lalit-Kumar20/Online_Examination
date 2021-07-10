@@ -1,4 +1,7 @@
-<h1>Ques : <%= q.q %> </h1>
+
+<link rel="icon" href="/logo.png" type="image/x-icon">
+<title>Question </title>
+<!-- <h1>Ques : <%= q.q %> </h1>
 <% if(q.type==="mcq") {%> 
     <h4>a) :<%=q.a%></h4>
     <h4>b) :<%=q.b%></h4>
@@ -16,4 +19,554 @@
 <button type="submit">Answer</button>
 </form>
 
+     -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add MCQ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+
+    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+
+    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+
+
+    <meta name="robots" content="noindex, follow">
+</head>
+
+<body>
     
+    <div class="head" style="width: 100vw;display: flex;justify-content: center;position: fixed;z-index: 3; top: 30px;visibility: collapse;">
+        <button class="close" style="cursor: pointer;"><i class="fas fa-times"></i></button>
+  
+    </div>
+    <div class="image-viewer" style="visibility:collapse;">
+      <img src="" alt="" id ="im">
+  </div>
+
+    <div class="container-contact100">
+        <div class="wrap-contact100">
+            <form class="contact100-form validate-form" action="/student/dashboard/answer/<%= id %>/<%= num %>" method="POST" enctype="multipart/form-data">
+        
+               
+                <span class="contact100-form-title">
+                  <h4 style="float: left;font-size: 40px;">Q) &nbsp;&nbsp; <%= q.q %></h4> 
+                  <br>
+                  <br>
+                  <% if(q.type==="mcq") {%> 
+                    <h4 style="float: left;">a) &nbsp;&nbsp;<%=q.a%></h4><br>
+                    <h4 style="float: left;">b) &nbsp;&nbsp;<%=q.b%></h4><br>
+                    <h4 style="float: left;">c) &nbsp;&nbsp;<%=q.c%></h4><br>
+                    <h4 style="float: left;">d) &nbsp;&nbsp;<%=q.d%></h4><br>
+                 <% } %>      
+                </span> 
+                    <% if(q.im==="yes"){ %> 
+                        <br>
+                        <% for(let i = 0;i<q.img.length;++i) {%>
+                           <img src="/<%= q.img[i] %>" alt="" width="100" height = "100" class="img" onclick="myfun(this)">
+                           <% } %>  
+                           <% } %>       
+                 <br>
+                 <br>
+                
+                
+                <div class="wrap-input100 validate-input" data-validate="">
+                    <textarea class="input100" name="answer" placeholder="Enter Answer" required></textarea>
+                    <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 validate-input" style="width: 100%;" data-validate="">
+                    <input id = "f" class="input100"  type="file" name="files" multiple>
+                       
+                </div>
+                <div class="container-contact100-form-btn">
+                    <button class="contact100-form-btn" type="submit">
+                        <span>
+                            <i class="fa fa-paper-plane-o m-r-6" aria-hidden="true"></i>
+                            Answer
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+
+    <script src="vendor/animsition/js/animsition.min.js"></script>
+
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="vendor/select2/select2.min.js"></script>
+
+    <script src="vendor/daterangepicker/moment.min.js"></script>
+    <script src="vendor/daterangepicker/daterangepicker.js"></script>
+
+    <script src="vendor/countdowntime/countdowntime.js"></script>
+
+    <script src="js/main.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-23581568-13');
+    </script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"rayId":"66c2fb530e191bce","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2021.6.0","si":10}'>
+    </script>
+</body>
+
+</html>
+
+
+
+<style>
+.img {
+    transition: all 0.3s;
+    cursor: pointer;
+}
+.img:hover {
+transform: scale(1.1);
+}
+    .image-viewer{
+        width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.8);
+       
+    }
+    
+.close {
+    top: 10px;
+    background: transparent;
+    border: 2px solid#47597E;
+;
+    border-radius: 50%;
+    color: #DBE6FD;
+
+    width: 60px;
+    font-size: 40px;
+    height: 60px;
+}
+.close:hover{
+    color: #D1D9D9;
+        background-color: #867AE9;
+    
+}
+    #im {
+        object-fit: cover;
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .input100::placeholder{
+        color: #192B40;
+    }
+    @font-face {
+        font-family: Ubuntu-Bold;
+        src: url(../fonts/ubuntu/Ubuntu-Bold.ttf)
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box
+    }
+
+    body,
+    html {
+        height: 100%;
+        font-family: Ubuntu-Bold, sans-serif;
+        background-color: #192B40;
+    
+    }
+
+    a {
+        font-family: Ubuntu-Bold;
+        font-size: 14px;
+        line-height: 1.7;
+        color: #666;
+        margin: 0;
+        transition: all .4s;
+        -webkit-transition: all .4s;
+        -o-transition: all .4s;
+        -moz-transition: all .4s
+    }
+
+    a:focus {
+        outline: none !important
+    }
+
+    a:hover {
+        text-decoration: none
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin: 0
+    }
+
+    p {
+        font-family: Ubuntu-Bold;
+        font-size: 14px;
+        line-height: 1.7;
+        color: #666;
+        margin: 0
+    }
+
+    ul,
+    li {
+        margin: 0;
+        list-style-type: none
+    }
+
+    input {
+        outline: none;
+        border: none
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+        appearance: none;
+        -webkit-appearance: none
+    }
+
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none
+    }
+
+    textarea {
+        outline: none;
+        border: none
+    }
+
+    textarea:focus,
+    input:focus {
+        border-color: transparent !important
+    }
+
+    input::-webkit-input-placeholder {
+        color: #bdbdd3
+    }
+
+    input:-moz-placeholder {
+        color: #bdbdd3
+    }
+
+    input::-moz-placeholder {
+        color: #bdbdd3
+    }
+
+    input:-ms-input-placeholder {
+        color: #bdbdd3
+    }
+
+    textarea::-webkit-input-placeholder {
+        color: #bdbdd3
+    }
+
+    textarea:-moz-placeholder {
+        color: #bdbdd3
+    }
+
+    textarea::-moz-placeholder {
+        color: #bdbdd3
+    }
+
+    textarea:-ms-input-placeholder {
+        color: #bdbdd3
+    }
+
+    button {
+        outline: none !important;
+        border: none;
+        background: 0 0
+    }
+
+    button:hover {
+        cursor: pointer
+    }
+
+    iframe {
+        border: none !important
+    }
+
+    .container {
+        max-width: 1200px
+    }
+
+    .container-contact100 {
+        width: 100%;
+        min-height: 100vh;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        position: relative;
+        background-color: #192B40
+    }
+
+    .wrap-contact100 {
+        width: 550px;
+        background: 0 0;
+        padding: 50px 0 160px
+    }
+
+    .contact100-form {
+        width: 100%
+    }
+
+    .contact100-form-title {
+        display: block;
+        font-family: Ubuntu-Bold;
+        font-size: 30px;
+        color: #EFF8FF;
+        line-height: 1.2;
+        text-align: center;
+        padding-bottom: 49px
+    }
+
+    .wrap-input100 {
+        width: 100%;
+        background-color: #fff;
+        border-radius: 31px;
+        margin-bottom: 16px;
+        position: relative;
+        z-index: 1
+    }
+
+    .input100 {
+        position: relative;
+        display: block;
+        width: 100%;
+        background: #fff;
+        border-radius: 31px;
+        font-family: Ubuntu-Bold;
+        font-size: 18px;
+        color: #8f8fa1;
+        line-height: 1.2
+    }
+
+    input.input100 {
+        height: 62px;
+        padding: 0 35px
+    }
+
+    textarea.input100 {
+        min-height: 169px;
+        padding: 19px 35px 0
+    }
+
+    .focus-input100 {
+        display: block;
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
+        border-radius: 31px;
+        background-color: #fff;
+        pointer-events: none;
+        -webkit-transition: all .4s;
+        -o-transition: all .4s;
+        -moz-transition: all .4s;
+        transition: all .4s
+    }
+
+    .input100:focus+.focus-input100 {
+        width: calc(100% + 20px)
+    }
+
+    .container-contact100-form-btn {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-top: 10px
+    }
+
+    .contact100-form-btn {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 20px;
+        min-width: 150px;
+        height: 62px;
+        background-color: transparent;
+        border-radius: 31px;
+        font-family: Ubuntu-Bold;
+        font-size: 16px;
+        color: #fff;
+        line-height: 1.2;
+        text-transform: uppercase;
+        -webkit-transition: all .4s;
+        -o-transition: all .4s;
+        -moz-transition: all .4s;
+        transition: all .4s;
+        position: relative;
+        z-index: 1
+    }
+
+    .contact100-form-btn::before {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
+        border-radius: 31px;
+        background-color: #867AE9;
+        pointer-events: none;
+        -webkit-transition: all .4s;
+        -o-transition: all .4s;
+        -moz-transition: all .4s;
+        transition: all .4s
+    }
+
+    .contact100-form-btn:hover:before {
+        background-color: #47597E;
+        width: calc(100% + 20px)
+    }
+
+    .validate-input {
+        position: relative
+    }
+
+    .alert-validate::before {
+        content: attr(data-validate);
+        position: absolute;
+        z-index: 1000;
+        max-width: 70%;
+        background-color: #fff;
+        border: 1px solid #c80000;
+        border-radius: 14px;
+        padding: 4px 25px 4px 10px;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        -o-transform: translateY(-50%);
+        transform: translateY(-50%);
+        right: 10px;
+        pointer-events: none;
+        font-family: Ubuntu-Bold;
+        color: #c80000;
+        font-size: 13px;
+        line-height: 1.4;
+        text-align: left;
+        visibility: hidden;
+        opacity: 0;
+        -webkit-transition: opacity .4s;
+        -o-transition: opacity .4s;
+        -moz-transition: opacity .4s;
+        transition: opacity .4s
+    }
+
+    .alert-validate::after {
+        content: "\f06a";
+        font-family: FontAwesome;
+        display: block;
+        position: absolute;
+        z-index: 1100;
+        color: #c80000;
+        font-size: 16px;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        -o-transform: translateY(-50%);
+        transform: translateY(-50%);
+        right: 16px
+    }
+
+    .alert-validate:hover:before {
+        visibility: visible;
+        opacity: 1
+    }
+
+
+    @media only screen and (max-width: 720px) { 
+     
+    #id {
+        object-fit: contain;
+        max-width: 100%;
+        max-height: 100%;
+    }
+}   
+
+
+    
+</style>
+<script>
+    function myfun(x){
+        document.getElementById('im').src = x.src
+        document.querySelector('.image-viewer').style.visibility = "visible"
+        document.querySelector('.container-contact100').style.visibility = "collapse"
+        document.querySelector('.head').style.visibility = "visible"
+        
+    }
+    document.querySelector('.close').addEventListener("click",()=>{
+        document.getElementById('im').src = ""
+        document.querySelector('.image-viewer').style.visibility = "collapse"
+        document.querySelector('.container-contact100').style.visibility = "visible"
+        document.querySelector('.head').style.visibility = "collapse"
+        
+    })
+</script>
