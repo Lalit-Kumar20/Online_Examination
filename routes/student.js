@@ -18,6 +18,7 @@ const {ensureAuth} = require('../config/auth');
 const Teacher = require("../models/teachers");
 const Test = require('../models/test');
 const Answer = require('../models/answer');
+const Mark = require('../models/marks')
 const router = require("express").Router()
 var errors = []
 router.get('/',(req,res)=>{
@@ -96,15 +97,27 @@ Answer.findOne({testId : req.params['id'],name : user},(err,found)=>{
 
 
 })
-
-router.get('/dashboard/marks',ensureAuth,(req,res)=>{
-    Answer.find({name : req.user.username,checked:true},(err,found)=>{
-        if(found){
-            res.render('view_marks',{
-                ans : found
-            })
-        }
+router.get('/marks/:id',(req,res)=>{
+    Mark.deleteOne({_id : req.params.id},(err)=>{
+        if(err) console.log(err)
+        else res.redirect('/student/dashboard/marks')
     })
+})
+router.get('/dashboard/marks',ensureAuth,(req,res)=>{
+    
+    Mark.find({name : req.user.username},(err,found)=>{
+        res.render('view_marks',{
+            ans : found
+        })
+    })
+    
+    // Answer.find({name : req.user.username,checked:true},(err,found)=>{
+    //     if(found){
+    //         res.render('view_marks',{
+    //             ans : found
+    //         })
+    //     }
+    // })
 })
 
 router.get('/dashboard/join/:id',ensureAuth,(req,res)=>{

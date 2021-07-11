@@ -1,6 +1,63 @@
-<% for(let i = 0;i<ans.length;++i) {%>
-<h3>Test Id : <%= ans[i].testId %> </h3>
-<h3>Marks Obtained : <%= ans[i].marks %> </h3>
-<h3>Out of : <%= ans[i].total_marks %> </h3>
 
-    <% } %>  
+<link rel="icon" href="/logo.png" type="image/x-icon">
+<title>Marks</title>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+<div class="low">
+
+    <% for(let i = 0;i<ans.length;++i) {%>
+       <div class="box" style="border: 3px solid #EFF8FF;border-radius: 20px; width: 80%;margin-top: 30px;padding: 20px;">
+
+        <h3 style="font-family: 'Ubuntu', sans-serif;font-size: 30px;color: #EFF8FF;">Test Id : &nbsp;&nbsp;<%= ans[i].testId %> </h3>
+        <h3 style="font-family: 'Ubuntu', sans-serif;font-size: 30px;color: #EFF8FF;">Marks Obtained : &nbsp;&nbsp;<%= ans[i].marks_obtained %> </h3>
+        <h3 style="font-family: 'Ubuntu', sans-serif;font-size: 30px;color: #EFF8FF;">Out of : &nbsp;&nbsp;<%= ans[i].total_marks %> </h3>
+        <a href="/student/marks/<%= ans[i]._id %>" class="button">Clear</a>
+       </div>
+        
+        <% } %>  
+        
+</div>
+
+
+
+ <style>
+
+.button {
+        width: 200px;
+        height: 70px;
+        margin-top: 20px;
+        display: flex;
+        border-radius: 30px;
+        justify-content: center;
+        background-color: #47597E;
+        transition: ease-out 0.5s;
+        font-size: 30px;
+        transform: scale(1);
+        font-family: 'Ubuntu', sans-serif;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        align-items: center;
+        color: #DBE6FD;
+        outline: none;
+        border: 0;
+    }
+
+    .button:hover {
+
+        color: #D1D9D9;
+        background-color: #867AE9;
+    }
+     * {
+         background-color: #192B40;
+     }
+
+     .low {
+         width: 100%;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         flex-direction: column;
+     }
+ </style>   

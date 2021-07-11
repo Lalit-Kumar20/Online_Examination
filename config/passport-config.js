@@ -14,11 +14,19 @@ module.exports = function(passport)
     
 
     passport.serializeUser(function(user, done) {
-        done(null, user);
+        done(null, user._id);
       });
       
-      passport.deserializeUser(function(user, done) {
-        done(null, user);
+      passport.deserializeUser(function(id, done) {
+        Student.findOne({_id : id},(err,found)=>{
+          if(found) return done(err,found);
+          else {
+            Teacher.findOne({_id : id},(e,f)=>{
+              if(f) return done(e,f);
+              else return done(e,null)
+            })
+          }
+        })
       });   
       
       

@@ -7,6 +7,7 @@ const User = require('../models/all')
 const Test = require('../models/test')
 const passport = require('passport')
 const Answer = require('../models/answer')
+const Mark = require('../models/marks');
 const {ensureAuth} = require('../config/auth')
 const { 
     v1: uuidv1,
@@ -65,7 +66,7 @@ res.render('view_enter_id');
 router.post('/view',ensureAuth,(req,res)=>{
     console.log("in rouute")
     Answer.find({testId : req.body.id,done : true},(err,found)=>{
-        if(found.length){
+        if(found){
             console.log("found")
             res.render("view_student_answers",{
                 ans : found
@@ -74,7 +75,7 @@ router.post('/view',ensureAuth,(req,res)=>{
         else {
             console.log("not found")
             res.render("wrong_id",{
-                err : "Wrong Test Id"
+                err : "Empty"
             })
         }
     })
@@ -109,12 +110,59 @@ router.get('/view/:id',ensureAuth,(req,res)=>{
         }
     })
 })
+
+router.get('/view/delete/:idd',(req,res)=>{
+    Answer.findOne({_id : req.params.idd},(err,found)=>{
+        for(let i = 0;i<found.answers.length;++i){
+            if(typeof found.answers[i].img!=='undefined'){
+                for(let j = 0;j<found.answers[i].img.length;++j){
+                    fs.unlinkSync("public/"+found.answers[i].img[j])
+                }
+            }
+            
+        }
+    })
+    Answer.deleteOne({_id : req.params.idd},(err)=>{
+     if(err) console.log(err)
+     else res.redirect('/teacher/view')
+    })
+})
+
 router.post('/view/:idd',ensureAuth,(req,res)=>{
+
+
     Answer.updateOne({_id : req.params.idd},{marks : req.body.marks,checked : true},(err)=>{
         if(err){
             console.log(err)
+
         }
-        res.redirect('/teacher/view')
+       else {
+          Answer.findOne({_id : req.params.idd},(er,fo)=>{
+              if(fo){
+                  Mark.findOne({name : fo.name,testId:fo.testId},(e,f)=>{
+                      if(f){
+                         Mark.updateOne({name : fo.name,testId:fo.testId},{marks_obtained : req.body.marks},(error)=>{
+                             if(error) console.log(error)
+                             else {
+                                 res.redirect('/teacher/view')
+                             }
+                         })
+                      }
+                      else {
+                      const m = new Mark({
+                          name : fo.name,
+                          testId : fo.testId,
+                          marks_obtained : req.body.marks,
+                          total_marks  : fo.total_marks
+                      })
+                      m.save();
+                      res.redirect('/teacher/view')
+                      }
+                  })
+              }
+          })
+        //res.redirect('/teacher/view')
+       } 
     })
 })
 
