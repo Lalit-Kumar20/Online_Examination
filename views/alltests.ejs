@@ -1,14 +1,94 @@
-<% for(let i = 0;i<test.length;++i) {%> 
-<h3> <%= test[i].name %> </h3>
-<h3>Test Id <%= test[i].id %> </h3>
-<h3>Total Questions <%= test[i].questions.length %> </h3>
-    <% if(test[i].status===true){ %>
-    <a href="/teacher/dashboard/test/stop/<%= test[i].id %>">Stop</a>
-    <% } %>
-    <%  if(test[i].status===false){ %>
-        <a href="/teacher/dashboard/test/start/<%= test[i].id %>">Start</a>
-        <% } %>    
-<a href="/teacher/dashboard/test/<%=test[i].id%>">Edit</a>
-<a href="/teacher/dashboard/test/delete/<%=test[i].id%>">Delete</a>
-<hr>
-<% } %> 
+<link rel = "icon" href = "/logo.png" 
+        type = "image/x-icon">
+        <title>All Tests</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+
+<div class="main">
+     <h3 style = "color: #EFF8FF;">Please do not delete test until you check all answers </h3>
+    <% for(let i = 0;i<test.length;++i) {%> 
+        <div class="box">
+
+            <h3 style="color: #EFF8FF;">Test Name :-&nbsp;&nbsp;  <%= test[i].name %> </h3>
+        <h3 style="color: #EFF8FF;">Test Id :- &nbsp;&nbsp;<%= test[i].id %> </h3>
+        <h3 style="color: #EFF8FF;">Total Questions :- &nbsp;&nbsp;<%= test[i].questions.length %> </h3>
+
+        <div class="buttons">
+            <% if(test[i].status===true){ %>
+                <a href="/teacher/dashboard/test/stop/<%= test[i].id %>" class="button">Stop</a>
+                <% } %>
+                <%  if(test[i].status===false){ %>
+                    <a href="/teacher/dashboard/test/start/<%= test[i].id %>" class="button">Start</a>
+                    <% } %>    
+            <a href="/teacher/dashboard/test/<%=test[i].id%>" class="button">Edit</a>
+            <a href="/teacher/dashboard/test/delete/<%=test[i].id%>" class="button">Delete</a>
+            
+        </div>
+           
+        
+        </div>
+    <% } %> 
+        
+</div>
+
+
+<style>
+    
+
+.button {
+        width: 200px;
+        height: 70px;
+        display: flex;
+        border-radius: 30px;
+        justify-content: center;
+        background-color: #47597E;
+        transition: ease-out 0.5s;
+        font-size: 30px;
+        transform: scale(0.8);
+        font-family: 'Ubuntu', sans-serif;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        align-items: center;
+        color: #DBE6FD;
+    }
+
+    .button:hover {
+
+        color: #D1D9D9;
+        background-color: #867AE9;
+    }
+    * {
+        background-color: #192B40;
+    }
+    h3{
+        font-size: 25px;
+        font-family: 'Ubuntu', sans-serif;
+    }
+    a {
+
+    }
+    .buttons{
+   display: flex;
+   justify-content: start;
+   flex-direction: row;
+    }
+    .box {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        width: 90vw;
+        border: 3px solid #EFF8FF;
+        border-radius: 20px;
+        margin-top: 50px;
+        text-overflow: ellipsis;
+    }
+
+   .main {
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       flex-direction: column;
+
+   }
+</style>

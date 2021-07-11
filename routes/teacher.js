@@ -63,10 +63,18 @@ router.get('/view',ensureAuth,(req,res)=>{
 res.render('view_enter_id');
 })
 router.post('/view',ensureAuth,(req,res)=>{
+    console.log("in rouute")
     Answer.find({testId : req.body.id,done : true},(err,found)=>{
-        if(found){
+        if(found.length){
+            console.log("found")
             res.render("view_student_answers",{
                 ans : found
+            })
+        }
+        else {
+            console.log("not found")
+            res.render("wrong_id",{
+                err : "Wrong Test Id"
             })
         }
     })
@@ -76,11 +84,27 @@ router.get('/view/:id',ensureAuth,(req,res)=>{
     Answer.findOne({_id : id},(err,found)=>{
         if(found){
             Test.findOne({id : found.testId},(err,f)=>{
-                res.render("view_full_answer",{
-                    ans : found.answers,
-                    ques : f.questions,
-                    idd: req.params.id
-                })
+                console.log(found)
+                console.log(f)
+
+                if(found.answers.length && f.questions.length){
+                    res.render("view_full_answer",{
+                        ans : found.answers,
+                        ques : f.questions,
+                        idd: req.params.id
+                    })
+                }
+                
+                else {
+                    res.render("wrong_id",{
+                        err : "Wrong Test Id"
+                    })
+                }
+            })
+        }
+        else {
+            res.render("wrong_id",{
+                err : "Wrong Test Id"
             })
         }
     })

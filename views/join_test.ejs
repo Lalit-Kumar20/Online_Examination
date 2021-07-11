@@ -40,7 +40,7 @@
 <div class="low" style="width: 100vw;transform: scale(0.8);">
    
    <% for(let i = 0;i<test.questions.length;++i) { %>
-      <div class="ques" style="width: 100vw;transform: scale(0.8); border: 3px solid #EFF8FF;padding: 30px;">
+      <div class="ques" style="width: 100vw;transform: scale(0.8); border: 3px solid #EFF8FF;padding: 30px; border-radius: 20px;">
          <div class="top" style="width: 100vw; display: flex;justify-content: space-between;">
             <h3 style="font-family: 'Ubuntu', sans-serif;font-size: 50px;color: #EFF8FF;">Q.) <%= test.questions[i].q %> </h3>
             <% if(Object.keys(ans.answers[i]).length!==0){ %>
