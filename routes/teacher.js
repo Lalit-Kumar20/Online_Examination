@@ -1,4 +1,6 @@
- // /teacher route
+require('dotenv').config()
+
+// /teacher route
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer')
@@ -7,6 +9,7 @@ const User = require('../models/all')
 const Test = require('../models/test')
 const passport = require('passport')
 const Answer = require('../models/answer')
+var nodemailer = require('nodemailer')
 const Mark = require('../models/marks');
 const {ensureAuth} = require('../config/auth')
 const { 
@@ -60,6 +63,68 @@ router.get('/dashboard',ensureAuth,(req,res)=>{
     //
 })
 
+
+router.post('/forgot',(req,res)=>{
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'bjohny636@gmail.com',
+          pass: process.env.PASS
+        }
+      });
+      Teacher.findOne({username:req.body.username},(err,found)=>{
+          if(found && found.googleId){
+            var mailOptions = {
+                from: 'bjohny636@gmail.com',
+                to: req.body.username,
+                subject: 'Reset Password',
+                html: "<div marginheight='0' topmargin='0' marginwidth='0' style='margin: 0px; background-color: #f2f3f8;' leftmargin='0'> <table cellspacing='0' border='0' cellpadding='0' width='100%' bgcolor='#f2f3f8' style='@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;'> <tr> <td> <table style='background-color: #f2f3f8; max-width:670px; margin:0 auto;' width='100%' border='0' align='center' cellpadding='0' cellspacing='0'> <tr> <td style='height:80px;'>&nbsp;</td></tr><tr> <td style='text-align:center;'> <a href='' title='logo' target='_blank'>  </a> </td></tr><tr> <td style='height:20px;'>&nbsp;</td></tr><tr> <td> <table width='95%' border='0' align='center' cellpadding='0' cellspacing='0' style='max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);'> <tr> <td style='height:40px;'>&nbsp;</td></tr><tr> <td style='padding:0 35px;'> <h1 style='color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;'>You have requested to reset your password</h1> <span style='display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;'></span> <p style='color:#455056; font-size:15px;line-height:24px; margin:0;'> You had logged in via google in the past. <br> Please login with Google! </p><a href='http://localhost:3000/teacher' style='background:#D4B435;text-decoration:none !important; font-weight:500; margin-top:35px; color:#000;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;'>Login</a> </td></tr><tr> <td style='height:40px;'>&nbsp;</td></tr></table> </td><tr> <td style='height:20px;'>&nbsp;</td></tr><tr> <td style='text-align:center;'> <p style='font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;'>&copy; </p></td></tr><tr> <td style='height:80px;'>&nbsp;</td></tr></table> </td></tr></table></div>"
+    
+              };
+              transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                  console.log(error);
+                } else {
+                  res.redirect('/')
+                }
+            })     
+          }
+          else {
+            var mailOptions = {
+                from: 'bjohny636@gmail.com',
+                to: req.body.username,
+                subject: 'Reset Password',
+                html: "<div marginheight='0' topmargin='0' marginwidth='0' style='margin: 0px; background-color: #f2f3f8;' leftmargin='0'> <table cellspacing='0' border='0' cellpadding='0' width='100%' bgcolor='#f2f3f8' style='@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif;'> <tr> <td> <table style='background-color: #f2f3f8; max-width:670px; margin:0 auto;' width='100%' border='0' align='center' cellpadding='0' cellspacing='0'> <tr> <td style='height:80px;'>&nbsp;</td></tr><tr> <td style='text-align:center;'> <a href='' title='logo' target='_blank'>  </a> </td></tr><tr> <td style='height:20px;'>&nbsp;</td></tr><tr> <td> <table width='95%' border='0' align='center' cellpadding='0' cellspacing='0' style='max-width:670px;background:#fff; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);'> <tr> <td style='height:40px;'>&nbsp;</td></tr><tr> <td style='padding:0 35px;'> <h1 style='color:#1e1e2d; font-weight:500; margin:0;font-size:32px;font-family:'Rubik',sans-serif;'>You have requested to reset your password</h1> <span style='display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;'></span> <p style='color:#455056; font-size:15px;line-height:24px; margin:0;'> Click the below link to change password <br>  </p><a href='http://localhost:3000/teacher/change/"+found._id+"' style='background:#D4B435;text-decoration:none !important; font-weight:500; margin-top:35px; color:#000;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;'>Login</a> </td></tr><tr> <td style='height:40px;'>&nbsp;</td></tr></table> </td><tr> <td style='height:20px;'>&nbsp;</td></tr><tr> <td style='text-align:center;'> <p style='font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;'>&copy; </p></td></tr><tr> <td style='height:80px;'>&nbsp;</td></tr></table> </td></tr></table></div>"
+    
+              };
+              transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                  console.log(error);
+                } else {
+                  res.redirect('/')
+                }
+            })  
+          }
+      })
+      
+})
+
+router.get('/change/:id',(req,res)=>{
+    res.render("teacher_change",{
+        id : req.params.id
+    })
+})
+router.post('/change/:id',(req,res)=>{
+    Teacher.findOne({_id : req.params.id},(err,found)=>{
+        found.setPassword(req.body.password, (err, user) => {
+            user.save();
+            res.render("successfully_changed")
+          })
+    })
+})
+router.get('/forgot',(req,res)=>{
+    res.render("teacher_change_password")
+})
 router.get('/view',ensureAuth,(req,res)=>{
 res.render('view_enter_id');
 })
