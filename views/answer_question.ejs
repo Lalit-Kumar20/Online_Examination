@@ -1,27 +1,48 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
 <link rel="icon" href="/logo.png" type="image/x-icon">
 <title>Question </title>
-<!-- <h1>Ques : <%= q.q %> </h1>
-<% if(q.type==="mcq") {%> 
-    <h4>a) :<%=q.a%></h4>
-    <h4>b) :<%=q.b%></h4>
-    <h4>c) :<%=q.c%></h4>
-    <h4>d) :<%=q.d%></h4>
- <% } %>
- <% if(q.im==="yes"){ %> 
-     <% for(let i = 0;i<q.img.length;++i) {%>
-        <img src="/<%= q.img[i] %>" alt="" width="100" height = "100">
-        <% } %>  
-        <% } %> 
-<form action="/student/dashboard/answer/<%= id %>/<%= num %>" method="POST" enctype="multipart/form-data">
-<input type="text" name="answer" placeholder="Answer">
-<input type="file" name="files" multiple>
-<button type="submit">Answer</button>
-</form>
 
-     -->
+<div class="main">
+    <h1 style="font-size: 45px;color: #DBE6FD;">Ques : <%= q.q %> </h1>
+    <br>
+        <br>
+    <% if(q.type==="mcq") {%> 
+        <h4 style="font-size: 35px;color: #DBE6FD;">a) :<%=q.a%></h4>
+        <br>
+        <br>
+        <h4 style="font-size: 35px;color: #DBE6FD;">b) :<%=q.b%></h4>
+        <br>
+        <br>
+        <h4 style="font-size: 35px;color: #DBE6FD;">c) :<%=q.c%></h4>
+        <br>
+        <br>
+        <h4 style="font-size: 35px;color: #DBE6FD;">d) :<%=q.d%></h4>
+     <% } %>
+     <% if(q.im==="yes"){ %> 
+         <% for(let i = 0;i<q.img.length;++i) {%>
+            <img src="/<%= q.img[i] %>" alt="" width="100" height = "100" class="img" onclick="myfun(this)">
+            <% } %>  
+            <% } %> 
+    <form action="/student/dashboard/answer/<%= id %>/<%= num %>" method="POST" enctype="multipart/form-data">
+        <textarea class="input100" name="answer" style="margin-top: 10px;" placeholder="Enter Answer"></textarea>
+    
+    <input class = "input100" style="width: 20%;" type="file" name="files" multiple>
+    <button class="contact100-form-btn" type="submit">Answer</button>
+    </form>
+    
+</div>
 
-<!DOCTYPE html>
+    
+
+<div class="head" style="width: 100vw;display: flex;justify-content: center;position: fixed;z-index: 3; top: 30px;visibility: collapse;">
+    <button class="close" style="cursor: pointer;"><i class="fas fa-times"></i></button>
+
+</div>
+<div class="image-viewer" style="visibility:collapse;">
+  <img src="" alt="" id ="im">
+</div>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -53,16 +74,9 @@
 
 <body>
     
-    <div class="head" style="width: 100vw;display: flex;justify-content: center;position: fixed;z-index: 3; top: 30px;visibility: collapse;">
-        <button class="close" style="cursor: pointer;"><i class="fas fa-times"></i></button>
-  
-    </div>
-    <div class="image-viewer" style="visibility:collapse;">
-      <img src="" alt="" id ="im">
-  </div>
 
     <div class="container-contact100">
-        <div class="wrap-contact100">
+        <div class="wrap-contact100" style="display: flex;flex-direction: column;">
             <form class="contact100-form validate-form" action="/student/dashboard/answer/<%= id %>/<%= num %>" method="POST" enctype="multipart/form-data">
         
                
@@ -72,23 +86,36 @@
                   <br>
                   <% if(q.type==="mcq") {%> 
                     <h4 style="float: left;">a) &nbsp;&nbsp;<%=q.a%></h4><br>
+                    <br>
                     <h4 style="float: left;">b) &nbsp;&nbsp;<%=q.b%></h4><br>
+                    <br>
                     <h4 style="float: left;">c) &nbsp;&nbsp;<%=q.c%></h4><br>
+                    <br>
                     <h4 style="float: left;">d) &nbsp;&nbsp;<%=q.d%></h4><br>
-                 <% } %>      
-                </span> 
+                 <% } %>  
+                 <br>
+                 <br>
+                 
+                 <br>
+                 <br>
+                 <br>
+                 <br>
+                </span>
+                <div class="images-questions" style="position: absolute; top:50%;left: 0;">
                     <% if(q.im==="yes"){ %> 
                         <br>
                         <% for(let i = 0;i<q.img.length;++i) {%>
                            <img src="/<%= q.img[i] %>" alt="" width="100" height = "100" class="img" onclick="myfun(this)">
                            <% } %>  
-                           <% } %>       
+                           <% } %> 
+                </div> 
+                          
                  <br>
                  <br>
                 
                 
-                <div class="wrap-input100 validate-input" data-validate="">
-                    <textarea class="input100" name="answer" placeholder="Enter Answer"></textarea>
+                <div class="wrap-input100 validate-input" style="margin-top: 50%;" data-validate="">
+                    <textarea class="input100" name="answer" style="margin-top: 10px;" placeholder="Enter Answer"></textarea>
                     <span class="focus-input100"></span>
                 </div>
                 <div class="wrap-input100 validate-input" style="width: 100%;" data-validate="">
@@ -141,7 +168,7 @@
 </body>
 
 </html>
-
+ -->
 
 
 <style>
@@ -328,7 +355,7 @@ transform: scale(1.1);
     }
 
     .container-contact100 {
-        width: 100%;
+        width: 100vw;
         min-height: 100vh;
         display: -webkit-box;
         display: -webkit-flex;
@@ -346,6 +373,9 @@ transform: scale(1.1);
     .wrap-contact100 {
         width: 550px;
         background: 0 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         padding: 50px 0 160px
     }
 
@@ -357,6 +387,11 @@ transform: scale(1.1);
         display: block;
         font-family: Ubuntu-Bold;
         font-size: 30px;
+        width: 100vw;
+        position: absolute;
+        top:0;
+        left: 0;
+        margin-left: 0;
         color: #EFF8FF;
         line-height: 1.2;
         text-align: center;
@@ -558,14 +593,14 @@ transform: scale(1.1);
     function myfun(x){
         document.getElementById('im').src = x.src
         document.querySelector('.image-viewer').style.visibility = "visible"
-        document.querySelector('.container-contact100').style.visibility = "collapse"
+        document.querySelector('.main').style.visibility = "collapse"
         document.querySelector('.head').style.visibility = "visible"
         
     }
     document.querySelector('.close').addEventListener("click",()=>{
         document.getElementById('im').src = ""
         document.querySelector('.image-viewer').style.visibility = "collapse"
-        document.querySelector('.container-contact100').style.visibility = "visible"
+        document.querySelector('.main').style.visibility = "visible"
         document.querySelector('.head').style.visibility = "collapse"
         
     })

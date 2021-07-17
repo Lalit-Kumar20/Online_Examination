@@ -37,9 +37,17 @@ module.exports = function(passport)
         userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
       },
       function(accessToken, refreshToken, profile,cb) {
-          Student.findOrCreate({username:profile.emails[0].value,name : profile.displayName,googleId: profile.id,email : profile.emails[0].value }, function (err, user) {
+        Student.findOne({username:profile.emails[0].value},(er,fd)=>{
+          if(fd && typeof fd.googleId==='undefined'){
+             return cb(er,null)
+          }
+          else {
+            Student.findOrCreate({username:profile.emails[0].value,name : profile.displayName,googleId: profile.id,email : profile.emails[0].value }, function (err, user) {
               return cb(err, user);
             });
+          }
+        })
+          
           
         
       }
@@ -51,9 +59,18 @@ module.exports = function(passport)
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
     },
     function(accessToken, refreshToken, profile,cb) {
+         
+      Teacher.findOne({username:profile.emails[0].value},(er,fd)=>{
+        if(fd && typeof fd.googleId==='undefined'){
+            return cb(er,null)
+        }
+        else {
           Teacher.findOrCreate({username:profile.emails[0].value,name : profile.displayName,googleId: profile.id,email : profile.emails[0].value }, function (err, user) {
             return cb(err, user);
           });
+      
+        }
+      })
       
     }
   ));
